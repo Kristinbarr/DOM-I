@@ -52,35 +52,32 @@ navbarEls.forEach((link, i) => {
   link.textContent = headerNames[i]
 })
 
-// trying to edit color of nav links
-// const navbarLinks = document.querySelectorAll('a')
-// navbar.style.backgroundColor = "green"
-// console.log(navbar)
-
 // add two more nav items
 const navBlogTitle = document.createElement('a')
-navBlogTitle.textContent = "Blog"
-navBlogTitle.href = "#"
+navBlogTitle.textContent = 'Blog'
+navBlogTitle.href = '#'
 
 const navMoreTitle = document.createElement('a')
-navMoreTitle.textContent = "More"
-navMoreTitle.href = "#"
+navMoreTitle.textContent = 'More'
+navMoreTitle.href = '#'
 
 navbar.prepend(navBlogTitle)
 navbar.appendChild(navMoreTitle)
 
 // change color of nav text
-const navElems = document.getElementsByClassName("navbar")
+const navbarLinks = document.querySelectorAll('nav a')
+navbarLinks.forEach((link) => {
+  link.style.color = 'green'
+})
 
 let logo = document.getElementById('logo-img')
 logo.setAttribute('src', siteContent['nav']['img-src'])
 
-
-
 // SECTION - CTA
-
-const ctaText = document.getElementsByClassName('cta')
-// ctaText.style.marginLeft = "20px"
+const ctaText = document.querySelectorAll('.cta-text')
+ctaText.forEach((el) => {
+  el.style.marginLeft = '15rem'
+})
 
 // cta Title
 const ctaTitle = document.querySelector('.cta-text h1')
@@ -94,81 +91,76 @@ ctaButton.textContent = siteContent['cta']['button']
 const ctaImage = document.getElementById('cta-img')
 ctaImage.setAttribute('src', siteContent['cta']['img-src'])
 
-
 // SECTION - MAIN CONTENT
-// const mainContents = document.querySelectorAll('.main-content div')
-// console.log(mainContents)
-// mainContents.forEach((el, i) => {
-//   console.log(el, i)
-//   console.log(siteContent['main-content'][i])
-//   console.log(el.querySelector('h4'))
-//   el.querySelector('h4').textContent = siteContent["main-content"][i]
-// })
+const mainContents = document.querySelectorAll('.main-content')
 
-const topContent = document.querySelector(".top-content")
+// This took way too long and probably terrible performance (N^4?)
+// probably could be done with recursion (attempt below)
+const mainSiteContent = Object.values(siteContent['main-content'])
 
-// features title
-const featuresTitle = topContent.firstElementChild
-featuresTitle.firstElementChild.textContent =
-  siteContent['main-content']['features-h4']
+let i = 0
+mainContents.forEach((el) => {
+  if (el.childNodes.length > 0) {
+    el.childNodes.forEach((ele) => {
+      if (ele.nodeName === 'IMG') {
+        ele.src = mainSiteContent[4]
+        i++
+      }
+      if (ele.childNodes.length > 0) {
+        ele.childNodes.forEach((elem) => {
+          if (elem.childNodes.length > 0) {
+            elem.childNodes.forEach((eleme) => {
+              if (eleme.nodeName !== '#text') {
+                eleme.textContent = mainSiteContent[i]
+                i++
+              }
+            })
+          }
+        })
+      }
+    })
+  }
+})
 
-// features content
-const featuresContent = topContent.firstElementChild
-featuresContent.lastElementChild.textContent =
-  siteContent['main-content']["features-content"]
+// // Attempt at recursion. not iterating properly
+// function fill(nodeList) {
+//   // base case: if nodelist has sub-nodes
+//   if (nodeList.childNodes === 0) return nodeList
+//   let i = 0
+//   // iterate through current nodelist
+//   nodeList.forEach((el) => {
+//     // if node is Img
+//     if (el.nodeName === 'IMG') {
+//       console.log('img', el)
+//       el.src = mainSiteContent[4]
+//       i++
+//     }
+//     // if node has sub-nodes, iterate through that nodeList
+//     if (el.childNodes.length > 0) {
+//       console.log('recurse', i, el.childNodes)
+//       fill(el.childNodes)
+//     }
+//     // if node is not strange text between elems,
+//     // apply new content and iterate
+//     if (el.nodeName !== '#text') {
+//       el.textContent = mainSiteContent[i]
+//       i++
+//     }
+//   })
+//   return nodeList
+// }
+// fill(mainContents)
 
-const aboutTitle = topContent.lastElementChild
-  aboutTitle.firstElementChild.textContent =
-    siteContent['main-content']['about-h4']
+// CONTACT
+const contact = document.querySelectorAll('.contact h4, .contact p')
 
-const aboutContent = topContent.lastElementChild
-aboutContent.lastElementChild.textContent =
-  siteContent['main-content']['about-content']
+contact.forEach((el, i) => {
+  el.textContent = Object.values(siteContent.contact)[i]
+})
 
+let contactAddress = document.querySelector('.contact p')
+contactAddress.style.width = '150px' // adding line break
 
-// SECTION - MIDDLE IMAGE
-const middleImage = document.getElementById('middle-img')
-middleImage.setAttribute('src', siteContent['main-content']['middle-img-src'])
-
-
-// SECTION - BOTTOM CONTENT
-const bottomContent = document.querySelector(".bottom-content")
-
-
-// services
-const servicesTitle = bottomContent.firstElementChild
-servicesTitle.firstElementChild.textContent =
-  siteContent['main-content']['services-h4']
-
-const servicesContent = bottomContent.firstElementChild
-servicesContent.lastElementChild.textContent =
-  siteContent['main-content']['services-content']
-
-// vision
-const visionTitle = bottomContent.lastElementChild
-visionTitle.firstElementChild.textContent =
-  siteContent['main-content']['vision-h4']
-
-const visionContent = bottomContent.lastElementChild
-visionContent.lastElementChild.textContent =
-  siteContent['main-content']['vision-content']
-
-
-
-  // CONTACT
-
-const contact = document.querySelector(".contact")
-const contactTitle = document.querySelector(".contact h1")
-contact.textContent = siteContent["contact"]["contact-h4"]
-
-
-
-  // contact: {
-  //   'contact-h4': 'Contact',
-  //   address: '123 Way 456 Street Somewhere, USA',
-  //   phone: '1 (888) 888-8888',
-  //   email: 'sales@greatidea.io'
-  // },
-  // footer: {
-  //   copyright: 'Copyright Great Idea! 2018'
-  // }
+// FOOTER
+const footerText = document.querySelector('footer p')
+footerText.textContent = siteContent.footer.copyright

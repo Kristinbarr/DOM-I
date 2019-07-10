@@ -1,9 +1,9 @@
 function startTick() {
-  document.querySelector("button").disabled = 'true'
+  document.querySelector("button").disabled = true
+  document.querySelector('.digits').classList.remove('redDigit')
   setTimeout(tick, 0)
 
   function tick() {
-    document.querySelector('.digits').classList.remove('redDigit')
     let msTens = document.getElementById('msTens')
     let msHuds = document.getElementById('msHundreds')
     let secOnes = document.getElementById('secondOnes')
@@ -31,8 +31,8 @@ function startTick() {
         secTens.textContent = parseInt(secTens.textContent) + 1
         document.querySelector('.digits').classList.add('redDigit')
         clearInterval(ticking)
+        document.querySelector('button').disabled = false
       }
-      document.querySelector('button').disabled = 'false'
     }
   }
 }

@@ -30,8 +30,8 @@ function startTick() {
         secOnes.textContent = 0
         secTens.textContent = parseInt(secTens.textContent) + 1
         document.querySelector('.digits').classList.add('redDigit')
-        clearInterval(ticking)
         document.querySelector('button').disabled = false
+        clearInterval(ticking)
       }
     }
   }
